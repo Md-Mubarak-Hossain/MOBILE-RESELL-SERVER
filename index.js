@@ -1,14 +1,14 @@
 const express = require('express');
 const cors = require('cors');
 const app = express();
-const package = require('./package.json')
+// const package = require('./package.json')
 const port = process.env.PORT || 5000;
 require('dotenv').config();
 
 
-app.get('/package', (req, res) => {
-    res.send(package);
-})
+// app.get('/package', (req, res) => {
+//     res.send(package);
+// })
 app.get('/', (req, res) => {
     res.send('mobile re-seller server running');
 })
@@ -23,3 +23,22 @@ const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
 console.log(uri)
+async function run() {
+    try {
+        const database = client.db("resellerDatabase");
+        const mobileCollection = database.collection("mobile");
+        // Query for a movie that has the title 'The Room'
+
+        app.get('/package', async (req, res) => {
+            const query = {};
+            const cursor = mobileCollection.find(query);
+            const result = await cursor.toArray();
+            res.send(result)
+        })
+
+
+    } finally {
+        console.log('re-seller finally run');
+    }
+}
+run().catch(err => console.error(err));
