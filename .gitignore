@@ -1,3 +1,6 @@
 /node_modules
 .env
 .vercel
+blog.json
+mobile.json
+faq.json
