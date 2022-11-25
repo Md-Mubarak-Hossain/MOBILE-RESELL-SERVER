@@ -34,7 +34,32 @@ async function run() {
         const mobileCollection = database.collection("mobile");
         const blogCollection = database.collection("blog");
         const faqCollection = database.collection("faqAns");
+        const adminCollection = database.collection("admin");
+        const userCollection = database.collection("user");
         // Query for a movie that has the title 'The Room'
+        // admin email password
+        app.get('/admin', async (req, res) => {
+            const query = {};
+            const cursor = adminCollection.find(query);
+            const result = await cursor.toArray();
+            res.send(result)
+        })
+        // admin email password end
+
+        // user email password 
+        app.get('/user', async (req, res) => {
+            const query = {};
+            const cursor = userCollection.find(query);
+            const result = await cursor.toArray();
+            res.send(result)
+        })
+        app.post('/user', async (req, res) => {
+            const user = req.body;
+            const result = await userCollection.insertOne(user);
+            console.log(result);
+            res.send(result);
+        })
+        // user email password end
         // blog data
         app.get('/blog', async (req, res) => {
             const query = {};
