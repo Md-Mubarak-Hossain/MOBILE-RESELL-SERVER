@@ -36,6 +36,8 @@ async function run() {
         const faqCollection = database.collection("faqAns");
         const adminCollection = database.collection("admin");
         const userCollection = database.collection("user");
+        const sellerCollection = database.collection("seller");
+        const wishCollection = database.collection("addWishList");
         // Query for a movie that has the title 'The Room'
         // admin email password
         app.get('/admin', async (req, res) => {
@@ -45,6 +47,32 @@ async function run() {
             res.send(result)
         })
         // admin email password end
+
+        // buyer product
+        app.get('/wish', async (req, res) => {
+            const query = {};
+            const cursor = wishCollection.find(query);
+            const result = await cursor.toArray();
+            res.send(result)
+        })
+        app.get('/wish/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const result = await wishCollection.findOne(query);
+            res.send(result)
+        })
+        app.post('/wish', async (req, res) => {
+            const user = req.body;
+            const result = await wishCollection.insertOne(user);
+            console.log(result);
+            res.send(result);
+        })
+        app.delete('/wish/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const result = await wishCollection.deleteOne(query);
+            res.send(result);
+        })
 
         // user email password 
         app.get('/user', async (req, res) => {
@@ -59,7 +87,33 @@ async function run() {
             console.log(result);
             res.send(result);
         })
+        app.delete('/user/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const result = await userCollection.deleteOne(query);
+            res.send(result);
+        })
         // user email password end
+        // seller email password 
+        app.get('/seller', async (req, res) => {
+            const query = {};
+            const cursor = sellerCollection.find(query);
+            const result = await cursor.toArray();
+            res.send(result)
+        })
+        app.post('/seller', async (req, res) => {
+            const seller = req.body;
+            const result = await sellerCollection.insertOne(seller);
+            console.log(result);
+            res.send(result);
+        })
+        app.delete('/seller/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const result = await sellerCollection.deleteOne(query);
+            res.send(result);
+        })
+        // seller email password end
         // blog data
         app.get('/blog', async (req, res) => {
             const query = {};
