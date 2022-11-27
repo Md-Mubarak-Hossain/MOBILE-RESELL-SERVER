@@ -67,6 +67,36 @@ async function run() {
             console.log(result);
             res.send(result);
         })
+        app.put('/wish/:id', async (req, res) => {
+            const id = req.params.id;
+            console.log(id);
+            const filter = {
+                _id: ObjectId(id)
+            };
+            const wish = req.body;
+            console.log(wish);
+            const options = { upsert: true };
+            const updateDoc = {
+                $set: {
+                    name: wish.name,
+                    brand,
+                    ram,
+                    camera,
+                    useTime,
+                    resalePrice,
+                    category,
+                    battery,
+                    price,
+                    location,
+                    picture,
+                    seller,
+                    paid: "paid"
+                }
+            }
+            const result = await wishCollection.updateOne(filter, updateDoc, options);
+            res.send(result);
+            console.log(result);
+        })
         app.delete('/wish/:id', async (req, res) => {
             const id = req.params.id;
             const query = { _id: ObjectId(id) };
@@ -99,6 +129,12 @@ async function run() {
             const query = {};
             const cursor = sellerCollection.find(query);
             const result = await cursor.toArray();
+            res.send(result)
+        })
+        app.get('/seller/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const result = await sellerCollection.findOne(query);
             res.send(result)
         })
         app.post('/seller', async (req, res) => {
